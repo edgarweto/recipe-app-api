@@ -6,7 +6,11 @@ ENV PYTHONUNBUFFERED 1
 
 # Copy to the docker image
 COPY ./requirements.txt /requirements.txt
+RUN apk add --update --no-cache postgresql-client
+RUN apk add --update --no-cache --virtual .tmp-build-deps \
+        gcc libc-dev linux-headers postgresql-dev
 RUN pip install -r /requirements.txt
+RUN apk del .tmp-build-deps
 
 # Create empty forlder on the docker image and switch to that as the default directory
 RUN mkdir /app
